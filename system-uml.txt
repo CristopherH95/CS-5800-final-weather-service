@@ -1,49 +1,95 @@
 @startuml
 
 
+enum TemperatureUnit {
+    FAHRENHEIT
+    CELSIUS
+}
+
+
+enum SpeedUnit {
+    MPH
+    KPH
+}
+
+
+enum DataSource {
+    WEATHER_API
+    WEATHER_GOV
+    OPEN_METEO
+}
+
+
+struct WeatherLocation {
+    + latitude: double
+    + longitude: double
+    + timezone: String
+}
+
+
+struct WeatherUnits {
+    + temperatureUnit: TemperatureUnit
+    + speedUnit: SpeedUnit
+}
+
+
+struct ForecastRequest {
+    + daysOut: int
+    + location: WeatherLocation
+    + units: WeatherUnits
+}
+
+
 struct WeatherData {
-    + temperature: double
-    + precipitation: double
-    + date: Date
+    + temperatureAverage: double
+    + temperatureUnit: TemperatureUnit
+    + windSpeed: String
+    + windDirection: String
+    + humidityPercentage: double
+    + start: Date
+    + end: Date
+    + source: DataSource
 }
 
 
 struct WeatherAPIData {
-    + temperature: double
-    + temperatureUnits: String
-    + precipitationChance: double
-    + windSpeed: double
-    + windDirection: String
-    + windSpeedUnits: String
-    + date: Date
+    + avgtemp_c: double
+    + avgtemp_f: double
+    + maxwind_mph: double
+    + maxwind_kph: double
+    + avghumidity: double
+    + date: String
 }
 
 struct WeatherGovData {
-    + temp: double
-    + precip: float
-    + windSpeed: double
+    + startTime: String
+    + endTime: String
+    + temperature: double
+    + temperatureUnit: String
+    + relativeHumidity: double
+    + windSpeed: String
     + windDirection: String
-    + timestamp: Date
+}
+
+struct WeatherGovGrid {
+    + office: String
+    + gridX: int
+    + gridY: int
 }
 
 struct OpenMeteoData {
-    + temperature: double
-    + weathercode: int
-    + windspeed: double
-    + windDirection: double
+    + daily_units: Map<String, String>
+    + time: Iterable<String>
+    + temperature_2m_max: Iterable<double>
+    + temperature_2m_min: Iterable<double>
+    + windspeed_10m_max: Iterable<double>
+    + windgusts_10m_max: Iterable<double>
+    + winddirection_10m_dominant: Iterable<double>
 }
 
 
-interface WeatherService {
-    + getForecast(in from: Date, in to: Date): Iterable<WeatherData>
-}
-
-interface WeatherAPIAdapter {
-    + requestData(in from: Date, in to: Date): Iterable<WeatherData>
-}
-
-interface PropertyChangeListener {
-    + propertyChange(in event: PropertyChangeEvent): void
+interface WeatherServiceStrategy {
+    + getForecast(in request: ForecastRequest): Iterable<WeatherData>
 }
 
 class PropertyChangeEvent {
@@ -55,13 +101,17 @@ class PropertyChangeEvent {
     + toString(): String
 }
 
+interface PropertyChangeListener {
+    + propertyChange(in event: PropertyChangeEvent): void
+}
+
 class PropertyChangeSupport {
     + addPropertyChangeListener(PropertyChangeListener listener): void
     + firePropertyChange(PropertyChangeEvent event): void
     + removePropertyChangeListener(PropertyChangeListener listener): void
 }
 
-class WeatherDataClient implements PropertyChangeListener {
+class WeatherServiceClient implements PropertyChangeListener {
     - name: String
     - dataFeed: Iterable<WeatherData>
     + setName(in name: String): void
@@ -70,12 +120,60 @@ class WeatherDataClient implements PropertyChangeListener {
 }
 
 class WeatherAPIClient {
-    + requestData()
+    + requestData(in q: String, in days: int): Iterable<WeatherAPIData>
 }
 
-class WeatherAPIService implements WeatherService {
-    - propertyChangeSupport: PropertyChangeSupport
-    - requestAPIData(in from: Date, in to: Date): 
+class WeatherGovAPIClient {
+    - convertLatLongToGrid(in latitude: double, in longitude: double): WeatherGovGrid
+    - submitRequest(in grid: WeatherGovGrid): Iterable<WeatherGovData>
+    + requestData(in latitude: double, in longitude: double): Iterable<WeatherGovData>
 }
+
+class OpenMeteoAPIClient {
+    + requestData(in latitude: double, in longitude: double): Iterable<OpenMeteoData>
+}
+
+class WeatherAPIService implements WeatherServiceStrategy {
+    - propertyChangeSupport: PropertyChangeSupport
+    - apiClient: WeatherAPIClient
+    - normalizeWeatherData(in data: Iterable<WeatherAPIData>): Iterable<WeatherData>
+    - convertDataItem(in item: WeatherAPIData): WeatherData
+}
+
+class WeatherGovService implements WeatherServiceStrategy {
+    - propertyChangeSupport: PropertyChangeSupport
+    - apiClient: WeatherGovAPIClient
+    - normalizeWeatherGovData(in data: Iterable<WeatherGovData>): Iterable<WeatherData>
+    - convertDataItem(in item: WeatherGovData): WeatherData
+}
+
+class OpenMeteoService implements WeatherServiceStrategy {
+    - propertyChangeSupport: PropertyChangeSupport
+    - apiClient: OpenMeteoAPIClient
+    - normalizeOpenMeteoData(in data: Iterable<OpenMeteoData>): Iterable<WeatherData>
+    - convertDataItem(in item: OpenMeteoData): WeatherData
+}
+
+TemperatureUnit <.. WeatherUnits
+SpeedUnit <.. WeatherUnits
+WeatherLocation <.. ForecastRequest
+WeatherUnits <.. ForecastRequest
+TemperatureUnit <.. WeatherData
+DataSource <.. WeatherData
+WeatherData <.. WeatherServiceStrategy
+ForecastRequest <.. WeatherServiceStrategy
+PropertyChangeEvent <.. PropertyChangeListener
+WeatherAPIData <.. WeatherAPIClient
+WeatherGovGrid <.. WeatherGovAPIClient
+WeatherGovData <.. WeatherGovAPIClient
+OpenMeteoData <.. OpenMeteoAPIClient
+WeatherAPIClient <.. WeatherAPIService
+WeatherGovAPIClient <.. WeatherGovService
+OpenMeteoAPIClient <.. OpenMeteoService
+PropertyChangeListener <.. PropertyChangeSupport
+PropertyChangeEvent <.. PropertyChangeSupport
+PropertyChangeSupport <.. WeatherAPIService
+PropertyChangeSupport <.. WeatherGovService
+PropertyChangeSupport <.. OpenMeteoService
 
 @enduml
