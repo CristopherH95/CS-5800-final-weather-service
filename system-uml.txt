@@ -44,6 +44,7 @@ struct WeatherData {
     + temperatureAverage: double
     + temperatureUnit: TemperatureUnit
     + windSpeed: String
+    + windSpeedUnit: SpeedUnit
     + windDirection: String
     + humidityPercentage: double
     + start: Date
@@ -159,21 +160,23 @@ SpeedUnit <.. WeatherUnits
 WeatherLocation <.. ForecastRequest
 WeatherUnits <.. ForecastRequest
 TemperatureUnit <.. WeatherData
+SpeedUnit <.. WeatherData
 DataSource <.. WeatherData
 WeatherData <.. WeatherServiceStrategy
+WeatherServiceClient "1" o-- "0..*" WeatherData
 ForecastRequest <.. WeatherServiceStrategy
 PropertyChangeEvent <.. PropertyChangeListener
 WeatherAPIData <.. WeatherAPIClient
 WeatherGovGrid <.. WeatherGovAPIClient
 WeatherGovData <.. WeatherGovAPIClient
 OpenMeteoData <.. OpenMeteoAPIClient
-WeatherAPIClient <.. WeatherAPIService
-WeatherGovAPIClient <.. WeatherGovService
-OpenMeteoAPIClient <.. OpenMeteoService
+WeatherAPIService "1" *.. "1" WeatherAPIClient
+WeatherGovService "1" *.. "1" WeatherGovAPIClient
+OpenMeteoService "1" *.. "1" OpenMeteoAPIClient
 PropertyChangeListener <.. PropertyChangeSupport
 PropertyChangeEvent <.. PropertyChangeSupport
-PropertyChangeSupport <.. WeatherAPIService
-PropertyChangeSupport <.. WeatherGovService
-PropertyChangeSupport <.. OpenMeteoService
+WeatherAPIService "1" *.. "1" PropertyChangeSupport
+WeatherGovService "1" *.. "1" PropertyChangeSupport
+OpenMeteoService "1" *.. "1" PropertyChangeSupport
 
 @enduml
