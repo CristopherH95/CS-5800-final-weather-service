@@ -1,0 +1,81 @@
+@startuml
+
+
+struct WeatherData {
+    + temperature: double
+    + precipitation: double
+    + date: Date
+}
+
+
+struct WeatherAPIData {
+    + temperature: double
+    + temperatureUnits: String
+    + precipitationChance: double
+    + windSpeed: double
+    + windDirection: String
+    + windSpeedUnits: String
+    + date: Date
+}
+
+struct WeatherGovData {
+    + temp: double
+    + precip: float
+    + windSpeed: double
+    + windDirection: String
+    + timestamp: Date
+}
+
+struct OpenMeteoData {
+    + temperature: double
+    + weathercode: int
+    + windspeed: double
+    + windDirection: double
+}
+
+
+interface WeatherService {
+    + getForecast(in from: Date, in to: Date): Iterable<WeatherData>
+}
+
+interface WeatherAPIAdapter {
+    + requestData(in from: Date, in to: Date): Iterable<WeatherData>
+}
+
+interface PropertyChangeListener {
+    + propertyChange(in event: PropertyChangeEvent): void
+}
+
+class PropertyChangeEvent {
+    + getNewValue(): Object
+    + getOldValue(): Object
+    + getPropagationId(): Object
+    + getPropertyName(): String
+    + setPropagationId(Object propagationId): void
+    + toString(): String
+}
+
+class PropertyChangeSupport {
+    + addPropertyChangeListener(PropertyChangeListener listener): void
+    + firePropertyChange(PropertyChangeEvent event): void
+    + removePropertyChangeListener(PropertyChangeListener listener): void
+}
+
+class WeatherDataClient implements PropertyChangeListener {
+    - name: String
+    - dataFeed: Iterable<WeatherData>
+    + setName(in name: String): void
+    + getName(): String
+    + printFeed(): void
+}
+
+class WeatherAPIClient {
+    + requestData()
+}
+
+class WeatherAPIService implements WeatherService {
+    - propertyChangeSupport: PropertyChangeSupport
+    - requestAPIData(in from: Date, in to: Date): 
+}
+
+@enduml
