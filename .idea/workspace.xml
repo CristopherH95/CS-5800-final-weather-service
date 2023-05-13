@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9d1d47d-1243-444a-a1fb-6f25f6def736" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/weather/records/OpenMeteoData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/weather/records/WeatherAPIData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/weather/records/WeatherGovData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/weather/records/WeatherGovGrid.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/weather/endpoints/OpenMeteoClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/weather/endpoints/WeatherAPIClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/weather/endpoints/WeatherGovClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/weather/exceptions/InvalidWeatherAPIRequestException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/driver/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +20,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Record" />
+        <option value="Class" />
       </list>
     </option>
   </component>
