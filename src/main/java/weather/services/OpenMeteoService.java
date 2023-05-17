@@ -22,7 +22,6 @@ import java.util.stream.StreamSupport;
 public class OpenMeteoService implements WeatherServiceStrategy {
     PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     OpenMeteoClient apiClient = new OpenMeteoClient();
-    Iterable<WeatherData> data;
 
     @Override
     public void getForecast(ForecastRequest request) {
@@ -85,8 +84,7 @@ public class OpenMeteoService implements WeatherServiceStrategy {
     }
 
     public void updateData(Iterable<WeatherData> data) {
-        propertyChangeSupport.firePropertyChange("data", this.data, data);
-        this.data = data;
+        propertyChangeSupport.firePropertyChange("data", null, data);
     }
 
     private double convertTemperature(double value, TemperatureUnit source, TemperatureUnit target) {

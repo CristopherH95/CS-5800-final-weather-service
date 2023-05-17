@@ -16,7 +16,6 @@ import java.util.Date;
 public class WeatherAPIService implements WeatherServiceStrategy {
     PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     WeatherAPIClient apiClient = new WeatherAPIClient();
-    Iterable<WeatherData> data;
 
     @Override
     public void getForecast(ForecastRequest request) {
@@ -70,7 +69,6 @@ public class WeatherAPIService implements WeatherServiceStrategy {
     }
 
     public void updateData(Iterable<WeatherData> data) {
-        propertyChangeSupport.firePropertyChange("data", this.data, data);
-        this.data = data;
+        propertyChangeSupport.firePropertyChange("data", null, data);
     }
 }

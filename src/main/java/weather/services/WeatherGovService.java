@@ -20,7 +20,6 @@ import java.util.stream.StreamSupport;
 public class WeatherGovService implements WeatherServiceStrategy {
     PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     WeatherGovClient apiClient = new WeatherGovClient();
-    Iterable<WeatherData> data;
 
     @Override
     public void getForecast(ForecastRequest request) {
@@ -70,8 +69,7 @@ public class WeatherGovService implements WeatherServiceStrategy {
     }
 
     public void updateData(Iterable<WeatherData> data) {
-        propertyChangeSupport.firePropertyChange("data", this.data, data);
-        this.data = data;
+        propertyChangeSupport.firePropertyChange("data", null, data);
     }
 
     private double convertTemperature(double value, TemperatureUnit source, TemperatureUnit target) {
