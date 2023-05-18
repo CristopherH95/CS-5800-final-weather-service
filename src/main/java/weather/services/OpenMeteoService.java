@@ -40,10 +40,16 @@ public class OpenMeteoService implements WeatherServiceStrategy {
         List<String> dates = iterableToList(item.time());
         List<Double> maxTemperatures = iterableToList(item.temperature_2m_max());
         List<Double> minTemperatures = iterableToList(item.temperature_2m_min());
-        List<Double> windSpeeds = iterableToList(item.windspeed_10m_max()).stream().map(speed -> convertSpeed(speed, sourceSpeedUnit, request.units().speedUnit())).collect(Collectors.toList());
+        List<Double> windSpeeds = iterableToList(item.windspeed_10m_max())
+                .stream()
+                .map(speed -> convertSpeed(speed, sourceSpeedUnit, request.units().speedUnit()))
+                .toList();
         List<Double> windDirections = iterableToList(item.winddirection());
 
-        List<Double> avgTemperatures = IntStream.range(0, maxTemperatures.size()).mapToObj(i -> (maxTemperatures.get(i) + minTemperatures.get(i)) / 2).map(temp -> convertTemperature(temp, sourceTempUnit, request.units().temperatureUnit())).toList();
+        List<Double> avgTemperatures = IntStream.range(0, maxTemperatures.size())
+                .mapToObj(i -> (maxTemperatures.get(i) + minTemperatures.get(i)) / 2)
+                .map(temp -> convertTemperature(temp, sourceTempUnit, request.units().temperatureUnit()))
+                .toList();
 
         double humidityPercentage = -100.0;
 
@@ -69,7 +75,19 @@ public class OpenMeteoService implements WeatherServiceStrategy {
         ArrayList<WeatherData> weatherData = new ArrayList<>();
 
         for(int i = 0; i < dates.size(); i++) {
-            weatherData.add(new WeatherData(avgTemperatures.get(i), request.units().temperatureUnit(), String.valueOf(windSpeeds.get(i)), request.units().speedUnit(), String.valueOf(windDirections.get(i)), humidityPercentage, startDates.get(i), endDates.get(i), DataSource.OPEN_METEO));
+            weatherData.add(
+                new WeatherData(
+                    avgTemperatures.get(i),
+                    request.units().temperatureUnit(),
+                    String.valueOf(windSpeeds.get(i)),
+                    request.units().speedUnit(),
+                    String.valueOf(windDirections.get(i)),
+                    humidityPercentage,
+                    startDates.get(i),
+                    endDates.get(i),
+                    DataSource.OPEN_METEO
+                )
+            );
         }
 
         return weatherData;

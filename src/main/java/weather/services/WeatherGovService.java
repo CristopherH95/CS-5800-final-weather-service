@@ -7,14 +7,10 @@ import weather.enums.*;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class WeatherGovService implements WeatherServiceStrategy {
@@ -28,7 +24,7 @@ public class WeatherGovService implements WeatherServiceStrategy {
     }
 
     private Iterable<WeatherData> normalizeWeatherGovData(Iterable<WeatherGovData> data, ForecastRequest request) {
-        List<WeatherGovData> govData = StreamSupport.stream(data.spliterator(), false).collect(Collectors.toList());
+        List<WeatherGovData> govData = StreamSupport.stream(data.spliterator(), false).toList();
         ArrayList<WeatherData> weatherData = new ArrayList<>();
 
         for(int i = 0; i < govData.size(); i++) {
@@ -41,10 +37,14 @@ public class WeatherGovService implements WeatherServiceStrategy {
     private WeatherData convertDataItem(WeatherGovData item, ForecastRequest request, int index) {
         TemperatureUnit sourceTemperatureUnit = item.temperatureUnit().toLowerCase().contains("f") ? TemperatureUnit.FAHRENHEIT : TemperatureUnit.CELSIUS;
         TemperatureUnit targetTemperatureUnit = request.units().temperatureUnit();
-        double temperatureAverage = convertTemperature(item.temperature(), sourceTemperatureUnit, targetTemperatureUnit);
+        double temperatureAverage = convertTemperature(
+            item.temperature(),
+            sourceTemperatureUnit,
+            targetTemperatureUnit
+        );
 
-        String windSpeed = item.windSpeed();
-        SpeedUnit windSpeedUnit = SpeedUnit.MPH;
+        SpeedUnit targetSpeedUnit = request.units().speedUnit();
+        double windSpeed = extractWindSpeed(item.windSpeed(), targetSpeedUnit);
         String windDirection = item.windDirection();
 
         double humidityPercentage = item.relativeHumidity();
@@ -57,7 +57,17 @@ public class WeatherGovService implements WeatherServiceStrategy {
 
         DataSource source = DataSource.WEATHER_GOV;
 
-        return new WeatherData(temperatureAverage, targetTemperatureUnit, windSpeed, windSpeedUnit, windDirection, humidityPercentage, start, end, source);
+        return new WeatherData(
+            temperatureAverage,
+            targetTemperatureUnit,
+            String.valueOf(windSpeed),
+            targetSpeedUnit,
+            windDirection,
+            humidityPercentage,
+            start,
+            end,
+            source
+        );
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -88,6 +98,16 @@ public class WeatherGovService implements WeatherServiceStrategy {
 
     private double celsiusToFahrenheit(double celsius) {
         return (celsius + 32) * 1.8;
+    }
+
+    private double extractWindSpeed(String speedText, SpeedUnit targetUnit) {
+        String digitsOnly = speedText.replaceAll("[^0-9]", "");
+        double windSpeed = Double.parseDouble(digitsOnly);
+        if (targetUnit == SpeedUnit.MPH) {
+            return windSpeed;
+        }
+
+        return windSpeed * 1.60934;
     }
 
     private Date getStartDate(Calendar calendar) {

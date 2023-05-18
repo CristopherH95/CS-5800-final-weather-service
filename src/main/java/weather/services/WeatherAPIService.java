@@ -57,7 +57,17 @@ public class WeatherAPIService implements WeatherServiceStrategy {
 
         DataSource source = DataSource.WEATHER_API;
 
-        return new WeatherData(temperatureAverage, temperatureUnit, windSpeed, windSpeedUnit, windDirection, humidityPercentage, start, end, source);
+        return new WeatherData(
+            temperatureAverage,
+            temperatureUnit,
+            windSpeed,
+            windSpeedUnit,
+            windDirection,
+            humidityPercentage,
+            start,
+            end,
+            source
+        );
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
