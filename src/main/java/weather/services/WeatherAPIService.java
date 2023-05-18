@@ -19,7 +19,9 @@ public class WeatherAPIService implements WeatherServiceStrategy {
 
     @Override
     public void getForecast(ForecastRequest request) {
-        Iterable<WeatherAPIData> APIData = apiClient.requestData("test", request.daysOut());
+        WeatherLocation location = request.location();
+        String query = location.latitude() + "," + location.longitude();
+        Iterable<WeatherAPIData> APIData = apiClient.requestData(query, request.daysOut());
         updateData(normalizeWeatherData(APIData, request));
     }
 

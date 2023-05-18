@@ -73,8 +73,9 @@ public class OpenMeteoService implements WeatherServiceStrategy {
         }
 
         ArrayList<WeatherData> weatherData = new ArrayList<>();
+        int forecastSize = Math.min(dates.size(), request.daysOut());
 
-        for(int i = 0; i < dates.size(); i++) {
+        for(int i = 0; i < forecastSize; i++) {
             weatherData.add(
                 new WeatherData(
                     avgTemperatures.get(i),

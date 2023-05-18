@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9d1d47d-1243-444a-a1fb-6f25f6def736" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/weather/exceptions/InvalidForecastUpdateException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/driver/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/driver/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/weather/enums/TemperatureUnit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/weather/enums/TemperatureUnit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/weather/records/WeatherData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/weather/records/WeatherData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/weather/services/OpenMeteoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/weather/services/OpenMeteoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/weather/services/WeatherAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/weather/services/WeatherAPIService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/weather/services/WeatherGovService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/weather/services/WeatherGovService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/weather/user/WeatherServiceClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/weather/user/WeatherServiceClient.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +26,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2PioIp96SjO8PHWOp9N8Inxn4Jo" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />

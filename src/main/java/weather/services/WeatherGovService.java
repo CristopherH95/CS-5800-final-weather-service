@@ -26,8 +26,9 @@ public class WeatherGovService implements WeatherServiceStrategy {
     private Iterable<WeatherData> normalizeWeatherGovData(Iterable<WeatherGovData> data, ForecastRequest request) {
         List<WeatherGovData> govData = StreamSupport.stream(data.spliterator(), false).toList();
         ArrayList<WeatherData> weatherData = new ArrayList<>();
+        int forecastSize = Math.min(govData.size(), request.daysOut());
 
-        for(int i = 0; i < govData.size(); i++) {
+        for(int i = 0; i < forecastSize; i++) {
             weatherData.add(convertDataItem(govData.get(i), request, i));
         }
 
